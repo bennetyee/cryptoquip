@@ -73,7 +73,8 @@ impl Cryptoquip {
     }
 
     /// Update the mapping function so occurences of `pre` will be
-    /// replaced with `post`.
+    /// replaced with `post`.  The value of `post` can be "." to erase
+    /// the existing mapping.
     fn update(&mut self, pre: char, post: char) {
         // decrement key count for previous image for pre, if any.
         {
@@ -91,14 +92,16 @@ impl Cryptoquip {
             }
         }  // old_rec scope
 
-        // increment key count for new image
-        {
+        if post != '.' {
+            // increment key count for new image
             let record = self.key_count.entry(post).or_insert(0);
             *record += 1;
+            // update map
+            self.map.insert(pre, post);
+        } else {
+            // remove guess for pre-image
+            self.map.remove(&pre);
         }
-
-        // update map
-        self.map.insert(pre, post);
     }
 
     fn print(&self) {
@@ -123,6 +126,8 @@ impl Cryptoquip {
                 println!("N ciphertext - new cryptoquip with ciphertext");
                 println!("c            - clear mappings");
                 println!("r abcd...    - replace a with b, c with d, etc");
+                println!("               post-image can be \".\" to remove");
+                println!("               the current guess for the pre-image");
                 println!("q            - quit");
             } else if line.starts_with("p") {
                 self.print();
@@ -140,19 +145,19 @@ impl Cryptoquip {
                     println!("update should have pairs of preimage/image characters");
                     continue;
                 }
-                let mut index = 0_u32;
+                let mut expect_post = false;
                 let mut pre: char = ' ';
                 for c in rest.chars() {
-                    if !c.is_alphabetic() {
+                    if !c.is_alphabetic() && !(expect_post && c == '.') {
                         println!("update should involve only alphabetic characters");
                         break;
                     }
-                    if index % 2 == 0 {
+                    if !expect_post {
                         pre = c;
                     } else {
                         self.update(pre, c);
                     }
-                    index = index + 1
+                    expect_post = !expect_post;
                 }
                 self.show_decoded();
             } else {
