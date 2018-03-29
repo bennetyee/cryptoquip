@@ -122,7 +122,8 @@ impl Cryptoquip {
                 println!("p            - print ciphertext / decoded text");
                 println!("N ciphertext - new cryptoquip with ciphertext");
                 println!("c            - clear mappings");
-                println!("rabcd...     - replace a with b, c with d, etc");
+                println!("r abcd...    - replace a with b, c with d, etc");
+                println!("q            - quit");
             } else if line.starts_with("p") {
                 self.print();
             } else if line.starts_with("q") {
