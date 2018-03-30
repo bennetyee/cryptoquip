@@ -15,6 +15,11 @@ use std::env;
 use std::io;
 use std::io::Write;
 
+// invariants:
+// - \forall c: map.contains_key(c) \Rightarrow c.is_alphabetic() \wedge
+//                                              map[c].is_alphabetic()
+// - map.contains_key(c) && map[c] = p \Rightarrow key_count.contains_key[p]
+// - \sum_{c: map.contains_key(c) && map[c] = p} 1 = key_count[p]
 struct Cryptoquip {
     ciphertext: String,
     map: HashMap<char, char>,
@@ -43,6 +48,12 @@ impl Cryptoquip {
     fn reset_map(&mut self) {
         self.map.clear();
         self.key_count.clear();
+    }
+
+    fn show_map(&self) {
+        for k in self.map.keys() {
+            println!("{} -> {}", k, self.map[k]);
+        }
     }
 
     fn reset(&mut self, c: &str) {
@@ -128,6 +139,7 @@ impl Cryptoquip {
                 println!("r abcd...    - replace a with b, c with d, etc");
                 println!("               post-image can be \".\" to remove");
                 println!("               the current guess for the pre-image");
+                println!("s            - show current mapping");
                 println!("q            - quit");
             } else if line.starts_with("p") {
                 self.print();
@@ -160,6 +172,8 @@ impl Cryptoquip {
                     expect_post = !expect_post;
                 }
                 self.show_decoded();
+            } else if line.starts_with("s") {
+                self.show_map();
             } else {
                 println!("Not understood: {}", line);
                 println!("Enter \"?\" to get help.");
