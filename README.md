@@ -15,3 +15,40 @@ effective.  Type in `?` to get a list of commands.  The only painful
 part of using it is that one has to actually type in the cryptogram --
 using a camera to take an image and then performing optical character
 recognition might be reasonable, but probably not worth the effort.
+
+## How To Build
+
+```
+$ git clone git@github.com:bennetyee/cryptoquip.git
+$ cd cryptquip
+$ cargo build
+```
+
+## How To Run
+
+The interface is very primitive:
+
+```
+$ target/debug/cryptoquip
+jwblqr bx snbswn utb otgrh aynqhxqjo inynqw aygrlj tqssgrnjj: "wgxn gj q abuw bx itnnygbj."
+cq: r ba
+..a... a. ..a... ..a ..... ......... ...... ...... .........: ".... .. . .a.. a. ......a.."
+cq: r xt   
+..a... at ..a... ..a ..... .....t... ...... ...... .........: "..t. .. . .a.. at ......a.."
+cq: p
+jwblqr bx snbswn utb otgrh aynqhxqjo inynqw aygrlj tqssgrnjj: "wgxn gj q abuw bx itnnygbj."
+..a... at ..a... ..a ..... .....t... ...... ...... .........: "..t. .. . .a.. at ......a.."
+cq: ?
+?            - this help
+p            - print ciphertext / decoded text
+N ciphertext - new cryptoquip with ciphertext
+c            - clear mappings
+r abcd...    - replace a with b, c with d, etc
+               post-image can be "." to remove
+               the current guess for the pre-image
+s            - show current mapping
+q            - quit
+cq:
+```
+
+
